@@ -25,6 +25,11 @@ void LineParser::ParseLine(std::wstring_view line)
 		// check if it is last character
 		else if (i == line_len - 1)
 		{
+			// chekc for /* */;
+			if (!m_is_multi_comment)
+			{
+				m_has_code = true;
+			}
 			continue;
 		}
 
