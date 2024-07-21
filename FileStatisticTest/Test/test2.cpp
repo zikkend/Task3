@@ -1,0 +1,7 @@
+/*
+// comment
+
+code;
+*/
+
+code;
