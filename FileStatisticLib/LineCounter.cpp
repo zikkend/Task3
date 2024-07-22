@@ -50,7 +50,7 @@ void LineCounter::CountLinesInFile(const std::string& file_path)
     m_total_line_counts += counts;
 }
 
-bool LineCounter::CheckForSingleFile(const std::string& root_folder)
+bool LineCounter::CheckForSingleFile(const std::filesystem::path& root_folder)
 {
     if (!std::filesystem::is_directory(root_folder))
     {
@@ -82,13 +82,15 @@ void LineCounter::ProcessFile(const std::filesystem::directory_entry& entry)
 
 void LineCounter::ProcessDirectory(const std::string& root_folder)
 {
-    if (!CheckForSingleFile(root_folder))
+    const std::filesystem::path correct_path = std::filesystem::u8path(root_folder);
+
+    if (!CheckForSingleFile(correct_path))
     {
         return;
     }
     try
     {
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(root_folder))
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(correct_path))
         {
             ProcessFile(entry);
         }
@@ -118,7 +120,9 @@ void LineCounter::ProcessFileConcurrently(const std::filesystem::directory_entry
 
 void LineCounter::ProcessDirectoryConcurrently(const std::string& root_folder)
 {
-    if (!CheckForSingleFile(root_folder))
+    const std::filesystem::path correct_path = std::filesystem::u8path(root_folder);
+
+    if (!CheckForSingleFile(correct_path))
     {
         return;
     }
@@ -126,7 +130,7 @@ void LineCounter::ProcessDirectoryConcurrently(const std::string& root_folder)
     {
         std::vector<std::future<void>> tasks;
 
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(root_folder))
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(correct_path))
         {
             ProcessFileConcurrently(entry, tasks);
         }

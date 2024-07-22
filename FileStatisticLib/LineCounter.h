@@ -29,6 +29,6 @@ private:
 
 
 	bool static IsCppOrCFile(const std::string& extension);
-	bool CheckForSingleFile(const std::string& root_folder);
+	bool CheckForSingleFile(const std::filesystem::path& root_folder);
 };
 
